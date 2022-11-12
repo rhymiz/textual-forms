@@ -1,13 +1,12 @@
 [tool.poetry]
 name = "textual-forms"
-license = { text = "MIT" }
+license = "MIT"
 version = "0.1.0"
 description = "Dynamic forms for Textual TUI Framework"
 keywords = ["tui", "terminal", "form", "widget"]
 authors = ["Lemuel Boyce <lemuelboyce@gmail.com>"]
 readme = "README.md"
-packages = [{ include = "src/textual_compose" }]
-dependencies = ["textual >=0.4.0"]
+packages = [{ include = "textual_forms", from = "src" }]
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
     "License :: OSI Approved :: MIT License",
