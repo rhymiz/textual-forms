@@ -49,3 +49,7 @@ class BasicTextualForm(App):
 if __name__ == '__main__':
     BasicTextualForm().run()
 ```
+
+The above snippet, produces the following screen:
+
+<img width="1006" alt="Screenshot 2022-11-12 at 12 51 53 AM" src="https://user-images.githubusercontent.com/7029352/201459554-df7f605b-62cd-4160-80e9-32d6deac9739.png">
