@@ -5,11 +5,23 @@
 
 Dynamic forms for [Textual](https://github.com/willmcgugan/textual) TUI framework.
 
+> #### Note: This library is still very much WIP 🧪
+
 ## Install
 
 ```bash
 pip install textual-forms
 ```
+
+## Form Field Schema
+
+| Key         | Type           | Required | Options                       |
+|-------------|----------------|----------|-------------------------------|
+| id          | string         | X        |                               |
+| type        | string         |          | string, number, integer, uuid |
+| value       | string, number |          |                               |
+| required    | boolean        |          |                               |
+| placeholder | string         |          |                               |    
 
 ## Example
 

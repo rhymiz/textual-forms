@@ -22,7 +22,7 @@ class FormField(Widget):
     """
     dirty: Reactive[bool] = Reactive(False)
     valid: Reactive[bool] = Reactive(False)
-    value: Reactive[Union[str, int, float, None]] = Reactive(None)
+    value: Reactive[str, None] = Reactive(None)
 
     field_error_style: Tuple[str] = ('solid', 'red'),
     field_success_style: Tuple[str] = ('solid', 'green')
@@ -31,8 +31,8 @@ class FormField(Widget):
         def __init__(
                 self,
                 sender: MessageTarget,
-                value: Union[str, int, float, None],
-        ):
+                value: Union[str, None],
+        ) -> None:
             self.value = value
             super().__init__(sender)
 
@@ -62,7 +62,7 @@ class FormField(Widget):
     async def on_input_changed(self, event: Input.Changed) -> None:
         self.value = event.value
 
-    async def watch_value(self, value):
+    async def watch_value(self, value: str) -> None:
         self.dirty = True if value else False
         widget = self.query_one(f"#{self._make_id(self.data)}", Input)
         required = self.data.get('required', False)
