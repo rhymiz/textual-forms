@@ -5,6 +5,11 @@
 
 Dynamic forms for [Textual](https://github.com/willmcgugan/textual) TUI framework.
 
+## Install
+
+```bash
+pip install textual-forms
+```
 
 ## Example
 
