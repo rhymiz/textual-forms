@@ -8,19 +8,25 @@ FORM_DATA = [
     {
         'id': 'name',
         'required': True,
-        'placeholder': 'name...'
+        'placeholder': 'name...',
+        'rules': {
+            'min_length': 3,
+        }
     },
     {
         'id': 'age',
         'type': 'integer',
         'required': True,
-        'placeholder': 'age...'
+        'placeholder': 'age...',
+        'rules': {
+            'min': 18,
+            'max': 65
+        }
     },
     {
         'id': 'email',
-        'value': 'john@example.com',
         'required': False,
-        'placeholder': 'hi@example.com'
+        'placeholder': 'hi@example.com',
     },
 ]
 

@@ -15,13 +15,30 @@ pip install textual-forms
 
 ## Form Field Schema
 
-| Key         | Type           | Required | Options                       |
-|-------------|----------------|----------|-------------------------------|
-| id          | string         | X        |                               |
-| type        | string         |          | string, number, integer, uuid |
-| value       | string, number |          |                               |
-| required    | boolean        |          |                               |
-| placeholder | string         |          |                               |    
+| Key         | Type        | Required | Options                 |
+|-------------|-------------|----------|-------------------------|
+| id          | str         | X        |                         |
+| type        | str         |          | string, number, integer |
+| value       | str, number |          |                         |
+| required    | bool        |          |                         |
+| placeholder | str         |          |                         |
+| rules       | dict        |          |                         |
+
+### Type Rules
+
+**string**
+
+* min_length
+* max_length
+
+**integer**
+
+* min
+* max
+
+**number**
+
+* N/A
 
 ## Example
 
@@ -36,18 +53,25 @@ FORM_DATA = [
     {
         'id': 'name',
         'required': True,
-        'placeholder': 'name...'
+        'placeholder': 'name...',
+        'rules': {
+            'min_length': 3,
+        }
     },
     {
         'id': 'age',
         'type': 'integer',
         'required': True,
-        'placeholder': 'age...'
+        'placeholder': 'age...',
+        'rules': {
+            'min': 18,
+            'max': 65
+        }
     },
     {
         'id': 'email',
         'required': False,
-        'placeholder': 'hi@example.com'
+        'placeholder': 'hi@example.com',
     },
 ]
 
