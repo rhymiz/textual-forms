@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Dict, List
 
 from textual.app import ComposeResult
-from textual.containers import Container, Horizontal
+from textual.containers import Horizontal
 from textual.message import Message, MessageTarget
 from textual.reactive import Reactive
 from textual.widget import Widget
@@ -27,7 +27,6 @@ class TextualForm(Widget):
     }
     #button_group {
         margin-left: 1;
-        height: 100%;
     }
     #button_group > Button {
         margin-right: 5;
@@ -59,13 +58,13 @@ class TextualForm(Widget):
             FormField(data=field, id=field['id'])
             for field in self.initial_data
         ]
-        yield Container(
-            *fields,
-            Horizontal(
-                Button('Submit', id='submit_button', disabled=True),
-                Button('Cancel', id='cancel_button', variant='error'),
-                id='button_group'
-            )
+        for field in fields:
+            yield field
+
+        yield Horizontal(
+            Button('Submit', id='submit_button', disabled=True),
+            Button('Cancel', id='cancel_button', variant='error'),
+            id='button_group',
         )
 
     async def watch_allow_submit(self, allow_submit: bool) -> None:
