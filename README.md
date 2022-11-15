@@ -7,6 +7,9 @@ Dynamic forms for [Textual](https://github.com/willmcgugan/textual) TUI framewor
 
 > #### Note: This library is still very much WIP 🧪
 
+## About
+Textual Forms aims to make it easy to add forms to your Textual-powered applications.
+
 ## Install
 
 ```bash
@@ -91,6 +94,13 @@ if __name__ == '__main__':
     BasicTextualForm().run()
 ```
 
-The above snippet, produces the following screen:
+---
 
-<img width="1006" alt="Screenshot 2022-11-12 at 12 51 53 AM" src="https://user-images.githubusercontent.com/7029352/201459554-df7f605b-62cd-4160-80e9-32d6deac9739.png">
+
+The above form data produces the below form
+
+![Screenshot 2022-11-14 at 9 51 54 PM](https://user-images.githubusercontent.com/7029352/201815737-bc2bea1c-aacb-498d-a58e-5d16e61e8718.png)
+
+
+## Contributing
+TBD
