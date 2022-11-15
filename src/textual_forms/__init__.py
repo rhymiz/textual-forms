@@ -1,3 +1,3 @@
-from .forms import TextualForm
+from .forms import Form
 
-__all__ = ['TextualForm']
+__all__ = ['Form']
