@@ -2,9 +2,9 @@ from rich.table import Table
 from textual.app import App, ComposeResult
 from textual.widgets import Static
 
-from textual_forms.forms import TextualForm
+from textual_forms.forms import Form
 
-FORM_DATA = [
+FIELDS = [
     {
         'id': 'name',
         'required': True,
@@ -30,16 +30,29 @@ FORM_DATA = [
     },
 ]
 
+BUTTONS = [
+    {
+        'id': 'submit',
+        'label': 'Submit',
+        'variant': 'success',
+        'watch_form_valid': True
+    },
+]
+
 
 class BasicTextualForm(App):
     def compose(self) -> ComposeResult:
         yield Static(id='submitted-data')
-        yield TextualForm(form_data=FORM_DATA)
+        yield Form(
+            fields=FIELDS,
+            buttons=BUTTONS,
+        )
 
-    async def on_textual_form_submit(self, message: TextualForm.Submit) -> None:
-        table = Table(*message.data.keys())
-        table.add_row(*message.data.values())
-        self.query_one('#submitted-data').update(table)
+    def on_form_event(self, message: Form.Event) -> None:
+        if message.event == 'submit':
+            table = Table(*message.data.keys())
+            table.add_row(*message.data.values())
+            self.query_one('#submitted-data').update(table)
 
 
 if __name__ == '__main__':

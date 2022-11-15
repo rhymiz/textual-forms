@@ -30,28 +30,19 @@ class FormField(Widget):
     """
     dirty: Reactive[bool] = Reactive(False)
     valid: Reactive[bool] = Reactive(False)
-    value: Reactive[Union[str, None]] = Reactive(None)
+    value: Reactive[str] = Reactive('')
 
     field_error_style: Tuple[str] = ('solid', 'red'),
     field_success_style: Tuple[str] = ('solid', 'green')
 
     class Changed(Message):
-        def __init__(
-                self,
-                sender: MessageTarget,
-                value: Union[str, None],
-        ) -> None:
+        def __init__(self, sender: MessageTarget, value: Union[str, None]) -> None:
             self.value = value
             super().__init__(sender)
 
-    def __init__(
-            self,
-            data: Dict,
-            *args,
-            **kwargs
-    ) -> None:
+    def __init__(self, data: Dict, *args, **kwargs) -> None:
         self.data = data
-        self._rules = data.pop('rules', {})
+        self.rules = data.pop('rules', {})
         self.validator = validators[data.get('type', 'string')]
         super().__init__(*args, **kwargs)
 
@@ -85,7 +76,7 @@ class FormField(Widget):
         error_widget = self.query_one(f"#{self.field_error_id}", FieldError)
         required = self.data.get('required', False)
         if self.dirty:
-            self.valid, message = self.validator(value, required, rules=self._rules)
+            self.valid, message = self.validator(value, required, rules=self.rules)
             input_widget.styles.border = (
                 self.field_success_style
                 if self.valid
