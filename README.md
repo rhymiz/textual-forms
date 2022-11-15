@@ -132,7 +132,16 @@ if __name__ == '__main__':
 
 ```
 
-![Screenshot 2022-11-14 at 9 51 54 PM](https://user-images.githubusercontent.com/7029352/201815737-bc2bea1c-aacb-498d-a58e-5d16e61e8718.png)
+**Initial render**
+<img width="1004" alt="Screenshot 2022-11-15 at 3 49 46 PM" src="https://user-images.githubusercontent.com/7029352/202023490-e6494105-a102-4d9d-9072-90872ecad41a.png">
+
+**Valid form** 
+<img width="1006" alt="Screenshot 2022-11-15 at 3 51 15 PM" src="https://user-images.githubusercontent.com/7029352/202023592-1a16f742-6af2-4e88-a9d3-7b84339fd231.png">
+
+**Invalid form**
+<img width="1006" alt="Screenshot 2022-11-15 at 3 51 39 PM" src="https://user-images.githubusercontent.com/7029352/202023734-76ae0b55-01b4-48a4-8a34-7c972d7a7df9.png">
+
+
 
 ## Contributing
 
