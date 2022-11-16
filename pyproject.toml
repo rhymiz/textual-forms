@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "textual-forms"
 license = "MIT"
-version = "0.1.3"
+version = "0.1.4"
 repository = "https://github.com/rhymiz/textual-forms"
 description = "Dynamic forms for Textual TUI Framework"
 keywords = ["tui", "terminal", "form", "widget"]
@@ -9,7 +9,7 @@ authors = ["Lemuel Boyce <lemuelboyce@gmail.com>"]
 readme = "README.md"
 packages = [{ include = "textual_forms", from = "src" }]
 classifiers = [
-    "Development Status :: 2 - Pre-Alpha",
+    "Development Status :: 3 - Alpha",
     "License :: OSI Approved :: MIT License",
     "Environment :: Console",
     "Intended Audience :: Developers",
