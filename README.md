@@ -2,6 +2,8 @@
 
 [![Python Versions](https://shields.io/pypi/pyversions/textual-inputs)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Downloads](https://pepy.tech/badge/textual-forms)](https://pepy.tech/project/textual-forms)
+[![Downloads](https://pepy.tech/badge/textual-forms/month)](https://pepy.tech/project/textual-forms)
 
 Dynamic forms for [Textual](https://github.com/willmcgugan/textual) TUI framework.
 
@@ -11,7 +13,7 @@ Dynamic forms for [Textual](https://github.com/willmcgugan/textual) TUI framewor
 
 Textual Forms aims to make it easy to add forms to your Textual-powered applications.
 
-### Requirements
+### Development Requirements
 
 * python >=3.7,<4
 * poetry
