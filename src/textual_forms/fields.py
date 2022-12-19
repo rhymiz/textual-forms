@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Iterable
+from typing import Any, Iterable, Type
 
 from textual.app import ComposeResult
 from textual.message import Message, MessageTarget
@@ -8,7 +8,7 @@ from textual.reactive import reactive
 from textual.widget import Widget
 from textual.widgets import Input, Static
 
-from .validators import validators
+from .validators import FieldValidator, IntegerFieldValidator, NumberFieldValidator, StringValidator
 
 
 class FieldError(Static):
@@ -40,13 +40,14 @@ class Field(Widget):
     dirty: bool = reactive(False)
     valid: bool = reactive(False)
 
+    validator = Type[FieldValidator]
+
     field_error_style: Iterable[str] = ("solid", "red")
     field_success_style: Iterable[str] = ("solid", "green")
 
     def __init__(self, data: dict[str, Any], **kwargs: dict[str, Any]) -> None:
         self.data = data
         self.rules = data.pop("rules", {})
-        self.validator = validators[data.get("type", "string")]
         super().__init__(**kwargs)
 
     class ValueChanged(Message):
@@ -94,12 +95,17 @@ class Field(Widget):
         input_widget = self.query_one(f"#{self._field_id}", Input)
         error_widget = self.query_one(f"#{self._field_error_id}", FieldError)
         required = self.data.get("required", False)
+
+        if self.validator is None:
+            self.emit_no_wait(self.ValueChanged(sender=self, value=value))
+            return
+
         if self.dirty:
             self.valid, message = self.validator(value, required, rules=self.rules)
             input_widget.styles.border = (
                 self.field_success_style if self.valid else self.field_error_style
             )
-            error_text: str = "" if self.valid else message # type: ignore
+            error_text: str = "" if self.valid else message  # type: ignore
             error_widget.update(error_text)
         else:
             # A field is considered valid if it's not flagged as required
@@ -112,6 +118,8 @@ class Field(Widget):
 
 
 class StringField(Field):
+    validator = StringValidator()
+
     def __init__(
         self,
         name: str,
@@ -126,7 +134,6 @@ class StringField(Field):
         # TODO: make custom formfield creation more
         #   generic. This is kind of alot...
         data: dict[str, Any] = {
-            "type": "string",
             "name": name,
             "value": value,
             "required": required,
@@ -140,6 +147,8 @@ class StringField(Field):
 
 
 class NumberField(Field):
+    validator = NumberFieldValidator()
+
     def __init__(
         self,
         name: str,
@@ -151,7 +160,6 @@ class NumberField(Field):
     ) -> None:
         data: dict[str, Any] = {
             "name": name,
-            "type": "number",
             "value": value,
             "required": required,
             "placeholder": placeholder,
@@ -161,6 +169,8 @@ class NumberField(Field):
 
 
 class IntegerField(Field):
+    validator = IntegerFieldValidator()
+
     def __init__(
         self,
         name: str,
@@ -174,7 +184,6 @@ class IntegerField(Field):
     ) -> None:
         data: dict[str, Any] = {
             "name": name,
-            "type": "integer",
             "value": value,
             "required": required,
             "placeholder": placeholder,
