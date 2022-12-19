@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "textual-forms"
 license = "MIT"
-version = "0.1.5"
+version = "0.2.0"
 repository = "https://github.com/rhymiz/textual-forms"
 description = "Dynamic forms for Textual TUI Framework"
 keywords = ["tui", "terminal", "form", "widget"]
