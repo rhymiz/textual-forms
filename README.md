@@ -108,7 +108,7 @@ BUTTONS = [
         'id': 'submit',
         'label': 'Submit',
         'variant': 'success',
-        'watch_form_valid': True
+        'enabled_on_form_valid': True
     },
 ]
 
