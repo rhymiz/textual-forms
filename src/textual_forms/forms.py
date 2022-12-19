@@ -1,13 +1,15 @@
-from typing import Any, Dict, List, Type
+from __future__ import annotations
+
+from typing import Any, Type
 
 from textual.app import ComposeResult
 from textual.containers import Horizontal
 from textual.message import Message, MessageTarget
-from textual.reactive import Reactive
 from textual.widget import Widget
-from textual.widgets import Button
+from textual.reactive import reactive
 
-from .fields import FormField
+from .buttons import Button
+from .fields import Field, IntegerField, NumberField, StringField
 
 
 class Form(Widget):
@@ -15,6 +17,7 @@ class Form(Widget):
     A container widget for inputs and buttons that
     behaves kind of like a web-based form with validations.
     """
+
     DEFAULT_CSS = """
     Form {
         padding: 1
@@ -31,10 +34,10 @@ class Form(Widget):
     }
     """
 
-    data: Reactive[Dict[str, Any]] = Reactive({})
-    valid: Reactive[bool] = Reactive(False)
+    data: dict[str, Any] = reactive({})
+    valid: bool = reactive(False)
     button_widget: Type[Button] = Button
-    form_field_widget: Type[FormField] = FormField
+    form_field_widget: Type[Field] = Field
     button_group_container: Type[Widget] = Horizontal
 
     class Event(Message):
@@ -46,7 +49,7 @@ class Form(Widget):
             self,
             sender: MessageTarget,
             event: str,
-            data: Dict[str, Any]
+            data: dict[str, Any],
         ) -> None:
             self.data = data
             self.event = event
@@ -55,36 +58,27 @@ class Form(Widget):
     def __init__(
         self,
         *,
-        fields: List[Dict[str, Any]],
-        buttons: List[Dict[str, Any]],
-        **kwargs: Dict[str, Any]
+        fields: list[Field | IntegerField | NumberField | StringField],
+        buttons: list[Button],
+        **kwargs: dict[str, Any],
     ) -> None:
         self.fields = fields
         self.buttons = buttons
-        self._watching_form_valid: List[Button] = []
+        self._watching_form_valid: list[Button] = []
         super().__init__(**kwargs)
 
     def compose(self) -> ComposeResult:
         for field in self.fields:
-            yield self.form_field_widget(
-                id=field['id'],
-                data=field,
-            )
+            yield field
 
-        buttons: List[Button] = []
-        for button in self.buttons:
-            btn = self.button_widget(
-                id=button['id'],
-                label=button['label'],
-                variant=button.get('variant', 'primary'),
-                classes=button.get('classes'),
-                disabled=button.get('disabled', True)
-            )
-            if button.get('watch_form_valid', False):
-                self._watching_form_valid.append(btn)
-            buttons.append(btn)
+        buttons: list[Button] = []
+        for data in self.buttons:
+            enabled_on_form_valid = getattr(data, "enabled_on_form_valid", False)
+            if enabled_on_form_valid:
+                self._watching_form_valid.append(data)
+            buttons.append(data)
 
-        yield self.button_group_container(*buttons, id='button_group')
+        yield self.button_group_container(*buttons, id="button_group")
 
     async def watch_valid(self, valid: bool) -> None:
         """
@@ -93,19 +87,21 @@ class Form(Widget):
         for button in self._watching_form_valid:
             button.disabled = not valid
 
-    async def on_form_field_changed(self, message: FormField.Changed) -> None:
+    async def on_field_value_changed(self, message: Field.ValueChanged) -> None:
         """
         listens for form field changes and assesses the validity of the form
         """
-        self.data[getattr(message.sender, 'id')] = message.value
-        self.valid = all([x.valid for x in self.query(FormField)])
+        self.data[getattr(message.sender, "_field_name")] = message.value
+        self.valid = all([x.valid for x in self.query(Field)])
 
     async def on_button_pressed(self, message: Button.Pressed) -> None:
         """
         emit an event whenever any button inside the form is pressed
         """
-        await self.emit(self.Event(
-            self,
-            data=self.data,
-            event=getattr(message.button, 'id'),
-        ))
+        await self.emit(
+            self.Event(
+                self,
+                data=self.data,
+                event=getattr(message.button, "id"),
+            )
+        )

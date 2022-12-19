@@ -1,9 +1,11 @@
+from __future__ import annotations
+
 import re
 from collections import defaultdict
-from typing import Any, Tuple, Union, Dict
+from typing import Any, Pattern, Union
 
-_INTEGER = re.compile(r'\d+$')
-_NUMBERS = re.compile(r'\d*[.,]?\d+$')
+_INTEGER: Pattern[str] = re.compile(r"\d+$")
+_NUMBERS: Pattern[str] = re.compile(r"\d*[.,]?\d+$")
 
 
 class FieldValidator:
@@ -11,22 +13,14 @@ class FieldValidator:
     base field validator class
     """
 
-    def validate(
-        self,
-        value: str,
-        rules: Dict[str, Any]
-    ) -> Tuple[bool, Union[str, None]]:
-        """"""
+    def validate(self, value: str, rules: dict[str, Any]) -> tuple[bool, str | None]:
         raise NotImplementedError
 
     def __call__(
-        self,
-        value: str,
-        required: bool,
-        rules: Dict[str, Any]
-    ) -> Tuple[bool, Union[str, None]]:
+        self, value: str, required: bool, rules: dict[str, Any]
+    ) -> tuple[bool, str | None]:
         if required and value is None:
-            return False, 'This value is required'
+            return False, "This value is required"
         return self.validate(value, rules=rules)
 
 
@@ -38,22 +32,22 @@ class IntegerFieldValidator(FieldValidator):
     def validate(
         self,
         value: str,
-        rules: Dict[str, Any],
-    ) -> Tuple[bool, Union[str, None]]:
+        rules: dict[str, Any],
+    ) -> tuple[bool, str | None]:
         """
         Validates whether a given string is a valid integer.
 
         Additionally, validates min, max bounds of the given integer.
         """
-        match = bool(_INTEGER.match(value))
+        match: bool = bool(_INTEGER.match(value))
         if not match:
-            return False, 'Invalid integer'
+            return False, "Invalid integer"
 
         int_value = int(value)
-        min_number: Union[int, None] = rules.get('min')
-        max_number: Union[int, None] = rules.get('max')
+        min_number: int | None = rules.get("min")
+        max_number: int | None = rules.get("max")
 
-        message: Union[str, None] = None
+        message: str | None = None
         is_valid: bool = True
 
         if min_number and max_number:
@@ -67,11 +61,11 @@ class IntegerFieldValidator(FieldValidator):
 
         if min_number:
             if int_value < min_number:
-                message = f'value must be greater than or equal to {min_number}'
+                message = f"value must be greater than or equal to {min_number}"
                 is_valid = False
         elif max_number:
             if int_value > max_number:
-                message = f'value must be less than or equal to {max_number}'
+                message = f"value must be less than or equal to {max_number}"
                 is_valid = False
         return is_valid, message
 
@@ -84,14 +78,14 @@ class StringValidator(FieldValidator):
     def validate(
         self,
         value: str,
-        rules: Dict[str, Any],
-    ) -> Tuple[bool, Union[str, None]]:
+        rules: dict[str, Any],
+    ) -> tuple[bool, str | None]:
         """validate a given string"""
-        min_length = rules.get('min_length')
-        max_length = rules.get('max_length')
+        min_length = rules.get("min_length")
+        max_length = rules.get("max_length")
 
-        message = None
-        is_valid = True
+        message: str | None = None
+        is_valid: bool = True
         string_length = len(value)
 
         if min_length and max_length:
@@ -115,22 +109,21 @@ class StringValidator(FieldValidator):
 
 
 class NumberFieldValidator(FieldValidator):
-    """a validator that ensures a given value is numeric.
-    """
+    """a validator that ensures a given value is numeric."""
 
     def validate(
-        self,
-        value: str,
-        rules: Dict[str, Any]
-    ) -> Tuple[bool, Union[str, None]]:
+        self, value: str, rules: dict[str, Any]
+    ) -> tuple[bool, Union[str, None]]:
         match = bool(_NUMBERS.match(value))
         if not match:
             return False, "invalid number"
         return True, None
 
 
-validators: Dict[str, FieldValidator] = defaultdict(lambda: StringValidator())
-validators.update(**{
-    'number': NumberFieldValidator(),
-    'integer': IntegerFieldValidator(),
-})
+validators: dict[str, FieldValidator] = defaultdict(lambda: StringValidator())
+validators.update(
+    **{
+        "number": NumberFieldValidator(),
+        "integer": IntegerFieldValidator(),
+    }
+)
