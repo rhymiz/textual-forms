@@ -7,7 +7,7 @@
 
 Dynamic forms for [Textual](https://github.com/willmcgugan/textual) TUI framework.
 
-> #### Note: This library is still very much WIP 🧪
+> #### Note: This library is still very much WIP 🧪. This means that breaking changes can be introduced at any point in time.
 
 ## About
 
