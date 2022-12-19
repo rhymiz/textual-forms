@@ -24,47 +24,51 @@ Textual Forms aims to make it easy to add forms to your Textual-powered applicat
 pip install textual-forms
 ```
 
-### Form Field Schema
+## Fields
 
-| Key         | Type        | Required | Options                 |
-|-------------|-------------|----------|-------------------------|
-| id          | str         | X        |                         |
-| type        | str         |          | string, number, integer |
-| value       | str, number |          |                         |
-| required    | bool        |          |                         |
-| placeholder | str         |          |                         |
-| rules       | dict        |          |                         |
+`textual_forms.fields.StringField`
 
-#### Type Rules
+`textual_forms.fields.NumberField`
 
-**string**
+`textual_forms.fields.IntegerField`
 
-* min_length
-* max_length
+### Custom fields and validators
 
-**integer**
+```python
+from __future__ import annotations
 
-* min
-* max
+from typing import Any
 
-**number**
+from textual_forms.fields import Field
+from textual_forms.validators import FieldValidator
 
-* N/A
 
-### Button Schema
+class UUIDValidator(FieldValidator):
+    def validate(self, value: str, rules: dict[str, Any]) -> tuple[bool, str | None]:
+        return True, None
 
-| Key              | Type | Required | Options                          |
-|------------------|------|----------|----------------------------------|
-| id               | str  | x        |                                  |
-| label            | str  | x        |                                  |
-| variant          | str  |          | primary, error, success, warning |
-| watch_form_valid | bool |          |                                  |
 
-Note: If you set the `watch_form_valid` property, the button will only be enabled when the form is valid.
+class UUIDField(Field):
+    validator = UUIDValidator()
 
-## Overriding Form Widgets
-
-Documentation TBD
+    def __init__(
+        self,
+        name: str,
+        *,
+        value: str | None = None,
+        required: bool = False,
+        placeholder: str | None = None,
+        **kwargs,
+    ):
+        data: dict[str, Any] = {
+            "name": name,
+            "value": value,
+            "required": required,
+            "placeholder": placeholder,
+            "rules": {},
+        }
+        super().__init__(data, **kwargs)
+```
 
 ---
 
@@ -76,49 +80,22 @@ from textual.app import App, ComposeResult
 from textual.widgets import Static
 
 from textual_forms.forms import Form
-
-FIELDS = [
-    {
-        'id': 'name',
-        'required': True,
-        'placeholder': 'name...',
-        'rules': {
-            'min_length': 3,
-        }
-    },
-    {
-        'id': 'age',
-        'type': 'integer',
-        'required': True,
-        'placeholder': 'age...',
-        'rules': {
-            'min': 18,
-            'max': 65
-        }
-    },
-    {
-        'id': 'email',
-        'required': False,
-        'placeholder': 'hi@example.com',
-    },
-]
-
-BUTTONS = [
-    {
-        'id': 'submit',
-        'label': 'Submit',
-        'variant': 'success',
-        'enabled_on_form_valid': True
-    },
-]
+from textual_forms.fields import StringField, IntegerField
+from textual_forms.buttons import Button
 
 
 class BasicTextualForm(App):
     def compose(self) -> ComposeResult:
-        yield Static(id='submitted-data')
+        yield Static(id="submitted-data")
+        yield Static("Order for beers")
         yield Form(
-            fields=FIELDS,
-            buttons=BUTTONS,
+            fields=[
+                StringField("name"),
+                IntegerField("age", required=True, min_value=21),
+            ],
+            buttons=[
+                Button("Submit")
+            ],
         )
 
     def on_form_event(self, message: Form.Event) -> None:
@@ -137,13 +114,11 @@ if __name__ == '__main__':
 **Initial render**
 <img width="1004" alt="Screenshot 2022-11-15 at 3 49 46 PM" src="https://user-images.githubusercontent.com/7029352/202023490-e6494105-a102-4d9d-9072-90872ecad41a.png">
 
-**Valid form** 
+**Valid form**
 <img width="1006" alt="Screenshot 2022-11-15 at 3 51 15 PM" src="https://user-images.githubusercontent.com/7029352/202023592-1a16f742-6af2-4e88-a9d3-7b84339fd231.png">
 
 **Invalid form**
 <img width="1006" alt="Screenshot 2022-11-15 at 3 51 39 PM" src="https://user-images.githubusercontent.com/7029352/202023734-76ae0b55-01b4-48a4-8a34-7c972d7a7df9.png">
-
-
 
 ## Contributing
 
