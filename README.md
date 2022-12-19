@@ -24,6 +24,14 @@ Textual Forms aims to make it easy to add forms to your Textual-powered applicat
 pip install textual-forms
 ```
 
+## Forms
+
+`textual_forms.forms.Form`
+
+## Buttons
+
+`textual_forms.buttons.Button`
+
 ## Fields
 
 `textual_forms.fields.StringField`
@@ -94,7 +102,10 @@ class BasicTextualForm(App):
                 IntegerField("age", required=True, min_value=21),
             ],
             buttons=[
-                Button("Submit")
+                Button(
+                    "Submit",
+                    enabled_on_form_valid=True,
+                )
             ],
         )
 
