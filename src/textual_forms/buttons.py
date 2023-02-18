@@ -7,8 +7,9 @@ from textual.widgets._button import ButtonVariant
 
 class Button(_Button):
     """
-    A textual Button with with a few customizations.
+    A textual Button with a few customizations.
     """
+
     def __init__(
         self,
         label: str | Text | None = None,

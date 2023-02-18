@@ -5,8 +5,8 @@ from typing import Any, Type
 from textual.app import ComposeResult
 from textual.containers import Horizontal
 from textual.message import Message, MessageTarget
-from textual.widget import Widget
 from textual.reactive import reactive
+from textual.widget import Widget
 
 from .buttons import Button
 from .fields import Field, IntegerField, NumberField, StringField
@@ -98,7 +98,7 @@ class Form(Widget):
         """
         emit an event whenever any button inside the form is pressed
         """
-        await self.emit(
+        await self.post_message(
             self.Event(
                 self,
                 data=self.data,

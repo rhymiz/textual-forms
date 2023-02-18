@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "textual-forms"
 license = "MIT"
-version = "0.2.0"
+version = "0.3.0"
 repository = "https://github.com/rhymiz/textual-forms"
 description = "Dynamic forms for Textual TUI Framework"
 keywords = ["tui", "terminal", "form", "widget"]
@@ -21,12 +21,13 @@ classifiers = [
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10"
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11"
 ]
 
 [tool.poetry.dependencies]
 python = "^3.7"
-textual = "*"
+textual = ">=0.11"
 
 
 [tool.poetry.group.dev.dependencies]
