@@ -17,6 +17,7 @@ Textual Forms aims to make it easy to add forms to your Textual-powered applicat
 
 * python >=3.7,<4
 * poetry
+* textual >=0.11.0
 
 ## Install
 

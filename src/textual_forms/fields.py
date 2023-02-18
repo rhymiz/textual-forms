@@ -8,7 +8,12 @@ from textual.reactive import reactive
 from textual.widget import Widget
 from textual.widgets import Input, Static
 
-from .validators import FieldValidator, IntegerFieldValidator, NumberFieldValidator, StringValidator
+from .validators import (
+    FieldValidator,
+    IntegerFieldValidator,
+    NumberFieldValidator,
+    StringValidator,
+)
 
 
 class FieldError(Static):
@@ -97,7 +102,7 @@ class Field(Widget):
         required = self.data.get("required", False)
 
         if self.validator is None:
-            self.emit_no_wait(self.ValueChanged(sender=self, value=value))
+            self.post_message_no_wait(self.ValueChanged(sender=self, value=value))
             return
 
         if self.dirty:
@@ -114,7 +119,7 @@ class Field(Widget):
             input_widget.styles.border = None
             error_widget.update("")
 
-        self.emit_no_wait(self.ValueChanged(sender=self, value=value))
+        self.post_message_no_wait(self.ValueChanged(sender=self, value=value))
 
 
 class StringField(Field):

@@ -17,7 +17,10 @@ class FieldValidator:
         raise NotImplementedError
 
     def __call__(
-        self, value: str, required: bool, rules: dict[str, Any]
+        self,
+        value: str,
+        required: bool,
+        rules: dict[str, Any],
     ) -> tuple[bool, str | None]:
         if required and value is None:
             return False, "This value is required"
@@ -112,7 +115,9 @@ class NumberFieldValidator(FieldValidator):
     """a validator that ensures a given value is numeric."""
 
     def validate(
-        self, value: str, rules: dict[str, Any]
+        self,
+        value: str,
+        rules: dict[str, Any],
     ) -> tuple[bool, Union[str, None]]:
         match = bool(_NUMBERS.match(value))
         if not match:
